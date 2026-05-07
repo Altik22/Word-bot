@@ -1,0 +1,62 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user profile information.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The unique ID of the user." },
+        "email": { "type": "string", "format": "email", "description": "The email address of the user." },
+        "displayName": { "type": "string", "description": "The display name of the user." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the profile was created." }
+      },
+      "required": ["userId", "email", "createdAt"]
+    },
+    "Document": {
+      "title": "Document",
+      "description": "Stores text documents and their analysis results.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "analysis": {
+          "type": "object",
+          "properties": {
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "enum": ["orthography", "grammar", "punctuation"] },
+                  "original": { "type": "string" },
+                  "suggested": { "type": "string" },
+                  "explanation": { "type": "string" },
+                  "position": { "type": "object", "properties": { "start": { "type": "number" }, "end": { "type": "number" } } }
+                }
+              }
+            },
+            "correctedContent": { "type": "string" },
+            "plagiarismScore": { "type": "number" },
+            "plagiarismDetails": { "type": "string" },
+            "copyrightInfo": { "type": "string" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Collection of user profiles."
+    },
+    "documents/{documentId}": {
+      "schema": "Document",
+      "description": "Collection of user documents."
+    }
+  }
+}
